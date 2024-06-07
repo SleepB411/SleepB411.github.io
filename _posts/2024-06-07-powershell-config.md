@@ -10,6 +10,7 @@ toc: false # false to disable the table of contents ont the right panel of the p
 
 ### Prerequisites
 - Download poweshell from miscrosoft store 
+ 
 > Not the windows power shell but the new one from the store
 {: .prompt-warning }
 
