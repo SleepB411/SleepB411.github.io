@@ -9,9 +9,9 @@ toc: false # false to disable the table of contents ont the right panel of the p
 ---
 
 ### Prerequisites
-- Download poweshell from miscrosoft store 
+- Download `PowerShell` from miscrosoft store 
  
-> Not the windows power shell but the new one from the store
+> Not the `Windows PowerShell` but the new one from the store
 {: .prompt-warning }
 
 - `Windows Terminal` Terminal
@@ -45,87 +45,84 @@ toc: false # false to disable the table of contents ont the right panel of the p
     $env:USERPROFILE\.config\powershell\user_profile.ps1
   ```
   - THE `user_profile.ps1` FILE
-```powershell
-# disable python venv prompt
-$env:VIRTUAL_ENV_DISABLE_PROMPT = 1
+  ```powershell
+    # disable python venv prompt
+    $env:VIRTUAL_ENV_DISABLE_PROMPT = 1
 
 
-# TODO: follow instruction on the site to customize the theme
-# powershell Theme  (NOTE: Self customized one, refer this website for other themes https://ohmyposh.dev/docs/installation/customize)
-oh-my-posh init pwsh --config 'solarized_dog_egg.omp.json' | Invoke-Expression 
+    # TODO: follow instruction on the site to customize the theme
+    # powershell Theme  (NOTE: Self customized one, refer this website for other themes https://ohmyposh.dev/docs/installation/customize)
+    oh-my-posh init pwsh --config 'solarized_dog_egg.omp.json' | Invoke-Expression 
 
-# Icons
-Import-Module -Name Terminal-Icons # Windows Terminal Icons for better `ls` experience
-# TODO: find the correct path for ChocolateyInstall
-Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1 # For 
+    # Icons
+    Import-Module -Name Terminal-Icons # Windows Terminal Icons for better `ls` experience
+    # TODO: find the correct path for ChocolateyInstall
+    Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1 # For 
 
-# PSReadLine
-# My Common Usage: 
-# 1. Ctrl + k: delete from the curor to the end of the line
-# 2. Ctrl + u: delete from the cursor to the beginning of the line
-Set-PSReadLineOption -EditMode Emacs
-Set-PSReadLineOption -BellStyle None
-Set-PSReadLineKeyHandler -Chord 'Ctrl+d' -Function DeleteChar
-Set-PSReadLineOption -PredictionSource History
+    # PSReadLine
+    # My Common Usage: 
+    # 1. Ctrl + k: delete from the curor to the end of the line
+    # 2. Ctrl + u: delete from the cursor to the beginning of the line
+    Set-PSReadLineOption -EditMode Emacs
+    Set-PSReadLineOption -BellStyle None
+    Set-PSReadLineKeyHandler -Chord 'Ctrl+d' -Function DeleteChar
+    Set-PSReadLineOption -PredictionSource History
 
-# Fzf
-# Ctrl + r: command history
-# Ctrl + f: fuzzy find files
-Import-Module PSFzf
-Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+f' -PSReadlineChordReverseHistory 'Ctrl+r'
-
-
-# Aliases-1
-Set-Alias vim nvim 
-Set-Alias g git
-Set-Alias grep findstr # e.g. ls | grep "pattern"
-# TODO: change directory to git
-Set-Alias less 'DirectoryToGit\usr\bin\less.exe' # e.g. cat filename | less 
-Set-Alias lg lazygit 
-Set-Alias open Invoke-Item # open current director in file explorer
-Set-Alias rn ren # rename
-
- 
-# TODO: cusotmize the functions except `which`
-# Aliases-2
-Set-Alias journal Get-Journal # I use neorg for journaling, which is a plugin for neovim (need customization i nthe function for journal directory)
-Set-Alias aienv Get-VEnv # activate my most frequently used python venv
-Set-Alias blog Write-Blog # write blog post (need customization in the function for blog directory)
-
-# Utilities
-# which command behave like the linux command
-function which ($command) {
-  Get-Command -Name $command -ErrorAction SilentlyContinue |
-    Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
-}
+    # Fzf
+    # Ctrl + r: command history
+    # Ctrl + f: fuzzy find files
+    Import-Module PSFzf
+    Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+f' -PSReadlineChordReverseHistory 'Ctrl+r'
 
 
-# Journaling function (need neorg plugin for neovim)
-function Get-Journal{
-  $directory = "$HOME/Super/journal"
-  if (-not (Test-Path $directory)) {
-    Write-Error "Go to user-profile.ps1 to double check the directory in function {Get-Journal}!"
-  }
-  cd "$HOME/Super"
-  nvim "$HOME/Super/journal/index.norg"
-}
+    # Aliases-1
+    Set-Alias vim nvim 
+    Set-Alias g git
+    Set-Alias grep findstr # e.g. ls | grep "pattern"
+    # TODO: change directory to git
+    Set-Alias less 'DirectoryToGit\usr\bin\less.exe' # e.g. cat filename | less 
+    Set-Alias lg lazygit 
+    Set-Alias open Invoke-Item # open current director in file explorer
+    Set-Alias rn ren # rename
 
-# Python venv function
-function Get-VEnv{
-  conda activate pykan
-}
+    # TODO: cusotmize the functions except `which`
+    # Aliases-2
+    Set-Alias journal Get-Journal # I use neorg for journaling, which is a plugin for neovim (need customization i nthe function for journal directory)
+    Set-Alias aienv Get-VEnv # activate my most frequently used python venv
+    Set-Alias blog Write-Blog # write blog post (need customization in the function for blog directory)
 
-# Blogging function
-function Write-Blog{
-  param (
-    [string]$Argument
-  )
-  $directory = "$HOME/Super/myblog/_posts"
-  if (-not (Test-Path $directory)) {
-    Write-Error "Go to user-profile.ps1 to double check the directory in function {Write-Blog}!"
-  }
-  cd "$HOME/Super/myblog/_posts"
-  nvim "$HOME/Super/myblog/_posts/2024-06-07-$Argument.md"
-}
-```
+    # Utilities
+    # which command behave like the linux command
+    function which ($command) {
+      Get-Command -Name $command -ErrorAction SilentlyContinue |
+      Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
+    }
 
+
+    # Journaling function (need neorg plugin for neovim)
+    function Get-Journal{
+      $directory = "$HOME/Super/journal"
+      if (-not (Test-Path $directory)) {
+        Write-Error "Go to user-profile.ps1 to double check the directory in function {Get-Journal}!"
+      }
+      cd "$HOME/Super"
+      nvim "$HOME/Super/journal/index.norg"
+    }
+
+    # Python venv function
+    function Get-VEnv{
+      conda activate pykan
+    }
+    # Blogging function
+    function Write-Blog{
+      param (
+        [string]$Argument
+      )
+      $directory = "$HOME/Super/myblog/_posts"
+      if (-not (Test-Path $directory)) {
+        Write-Error "Go to user-profile.ps1 to double check the directory in function {Write-Blog}!"
+      }
+      cd "$HOME/Super/myblog/_posts"
+      nvim "$HOME/Super/myblog/_posts/2024-06-07-$Argument.md"
+    }
+  ```
