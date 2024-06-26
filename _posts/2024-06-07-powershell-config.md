@@ -46,13 +46,23 @@ toc: false # false to disable the table of contents ont the right panel of the p
   ```
   - THE `user_profile.ps1` FILE
   ```powershell
+
+    $SUPER_DIR = "$HOME/Super/"
+    $BLOG_DIR = "$SUPER/myblog/_posts" # Blog directory
+    $OMP_THEME = "$HOME/AppData/Local/nvim/.theme/current.omp.json" 
+    $JOURNAL_DIR = "$HOME/Super/journal"
+    $GIT_BIN = "F:/Sleepb411/Study/Git/Git/Git/usr/bin" 
+
     # disable python venv prompt
     $env:VIRTUAL_ENV_DISABLE_PROMPT = 1
+    $env:PYTHONIOENCODING="utf-8"
 
+    # `fuck` comamd
+    iex "$(thefuck --alias fk)" 
 
     # TODO: follow instruction on the site to customize the theme
     # powershell Theme  (NOTE: Self customized one, refer this website for other themes https://ohmyposh.dev/docs/installation/customize)
-    oh-my-posh init pwsh --config 'solarized_dog_egg.omp.json' | Invoke-Expression 
+    oh-my-posh init pwsh --config $OMP_THEME | Invoke-Expression 
 
     # Icons
     Import-Module -Name Terminal-Icons # Windows Terminal Icons for better `ls` experience
@@ -80,7 +90,7 @@ toc: false # false to disable the table of contents ont the right panel of the p
     Set-Alias g git
     Set-Alias grep findstr # e.g. ls | grep "pattern"
     # TODO: change directory to git
-    Set-Alias less 'DirectoryToGit\usr\bin\less.exe' # e.g. cat filename | less 
+    Set-Alias less "$GIT_BIN/less.exe" # e.g. cat filename | less
     Set-Alias lg lazygit 
     Set-Alias open Invoke-Item # open current director in file explorer
     Set-Alias rn ren # rename
@@ -98,31 +108,32 @@ toc: false # false to disable the table of contents ont the right panel of the p
       Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
     }
 
-
     # Journaling function (need neorg plugin for neovim)
+
     function Get-Journal{
-      $directory = "$HOME/Super/journal"
-      if (-not (Test-Path $directory)) {
+      if (-not (Test-Path $JOURNAL_DIR)) {
         Write-Error "Go to user-profile.ps1 to double check the directory in function {Get-Journal}!"
       }
-      cd "$HOME/Super"
-      nvim "$HOME/Super/journal/index.norg"
+      cd $SUPER_DIR
+      nvim "$JOURNAL_DIR/index.norg"
     }
 
     # Python venv function
     function Get-VEnv{
       conda activate pykan
     }
+
     # Blogging function
     function Write-Blog{
       param (
         [string]$Argument
       )
-      $directory = "$HOME/Super/myblog/_posts"
-      if (-not (Test-Path $directory)) {
+      if (-not (Test-Path $BLOG_DIR)) {
         Write-Error "Go to user-profile.ps1 to double check the directory in function {Write-Blog}!"
       }
-      cd "$HOME/Super/myblog/_posts"
-      nvim "$HOME/Super/myblog/_posts/2024-06-07-$Argument.md"
+      cd "$BLOG_DIR"
+      $todayDate = Get-Date -Format "yyyy-MM-dd"
+      $filePath = "$BLOG_DIR/$todayDate-$Argument.md"
+      nvim $filePath 
     }
   ```
